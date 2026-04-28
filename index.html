@@ -1800,6 +1800,98 @@ footer {
   }
 }
 
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE — gallery & hero fixes
+   ══════════════════════════════════════════ */
+@media (max-width: 700px) {
+
+  /* Gallery section padding */
+  .gallery-section {
+    padding: 3rem 0.8rem 5rem;
+  }
+
+  /* Force ALL gallery rows to stack vertically */
+  .gallery-row {
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 2.5rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  /* Every column becomes full width */
+  .gallery-row > div {
+    flex: none !important;
+    width: 100% !important;
+    height: 320px !important;
+  }
+
+  /* Taller for portrait images in row 1 */
+  .gallery-row:nth-child(2) > div {
+    height: 420px !important;
+  }
+
+  /* Three portrait row — each gets good height */
+  .gallery-row:nth-child(3) > div {
+    height: 360px !important;
+  }
+
+  /* Photo booth grid — taller so all 4 shots show */
+  .gallery-row:nth-child(4) > div:last-child {
+    height: 400px !important;
+  }
+
+  /* g-item & g-frame always fill their container */
+  .g-item { height: 100% !important; }
+  .g-frame { height: 100% !important; }
+
+  /* g-stack becomes normal column flow on mobile */
+  .g-stack { height: auto !important; }
+  .g-stack .g-item { min-height: 300px !important; flex: none !important; }
+
+  /* Hero section */
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5rem 1.5rem 3rem;
+    gap: 2rem;
+    min-height: auto;
+  }
+  .hero-content { padding: 0; text-align: center; width: 100%; }
+  .hero-tag { justify-content: center; }
+  .hero-tag::before { display: none; }
+  .hero-name { font-size: clamp(2.8rem, 14vw, 5rem); }
+  .hero-portrait-wrap { width: min(85vw, 360px); padding: 1rem 0 2rem; }
+  .hero-hearts, .scroll-ind { display: none; }
+
+  /* Section labels */
+  .section-label { margin-bottom: 2rem; }
+
+  /* Video & message section padding */
+  .video-section { padding: 2rem 1rem 4rem; }
+  .msg-section { padding: 2rem 1rem 4rem; }
+}
+
+/* ── Tablet: 701–1024px ── */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .gallery-section { padding: 4rem 1.5rem 6rem; }
+  .gallery-row { gap: 1rem !important; }
+
+  /* 3-col portrait row → 2 + 1 wrap */
+  .gallery-row:nth-child(3) {
+    flex-wrap: wrap;
+    height: auto !important;
+  }
+  .gallery-row:nth-child(3) > div {
+    flex: 0 0 calc(50% - 0.5rem) !important;
+    height: 280px !important;
+  }
+  .gallery-row:nth-child(3) > div:last-child {
+    flex: 0 0 100% !important;
+    height: 260px !important;
+  }
+}
+
 </style>
 </head>
 <body>
