@@ -262,42 +262,6 @@ body {
   align-items: center;
   justify-content: center;
   padding: 4rem 0;
-  perspective: 1800px;
-  perspective-origin: 50% 42%;
-}
-
-.hero-portrait-stage {
-  position: relative;
-  width: 100%;
-  transform-style: preserve-3d;
-  animation: portraitStageFloat 6s ease-in-out infinite;
-}
-
-.hero-portrait-scene {
-  --hero-rx: -8deg;
-  --hero-ry: 12deg;
-  --gloss-x: 50%;
-  --gloss-y: 28%;
-  position: relative;
-  width: 100%;
-  transform-style: preserve-3d;
-  transform: rotateX(var(--hero-rx)) rotateY(var(--hero-ry));
-  transition: transform 180ms ease-out;
-  will-change: transform;
-}
-
-@keyframes portraitStageFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.hero-portrait-shadow {
-  position: absolute;
-  inset: 14% 9% -8% 9%;
-  background: radial-gradient(ellipse, rgba(58,42,46,0.34) 0%, rgba(58,42,46,0.14) 48%, transparent 75%);
-  filter: blur(28px);
-  transform: translateZ(-90px) translateY(48px) scale(0.92);
-  pointer-events: none;
 }
 
 /* spinning ring */
@@ -364,95 +328,35 @@ body {
 .hero-portrait-frame {
   position: relative;
   width: 100%;
-  border-radius: 28px;
-  overflow: visible;
-  padding: 18px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.98), rgba(252,233,238,0.96) 52%, rgba(236,207,216,0.98));
+  border-radius: 18px;
+  overflow: hidden;
   box-shadow:
-    0 0 0 3px rgba(194,99,122,0.16),
-    0 0 0 8px rgba(253,246,240,0.92),
-    0 36px 80px rgba(194,99,122,0.24),
-    0 10px 24px rgba(0,0,0,0.12);
-  transform-style: preserve-3d;
+    0 0 0 3px rgba(194,99,122,0.18),
+    0 0 0 7px rgba(253,246,240,0.9),
+    0 0 0 9px rgba(194,99,122,0.12),
+    0 24px 60px rgba(194,99,122,0.22),
+    0 6px 20px rgba(0,0,0,0.08);
   animation: portraitReveal 1.2s 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
   opacity: 0;
-  transform: translateY(30px) translateZ(36px) scale(0.95);
+  transform: translateY(30px) scale(0.95);
 }
 @keyframes portraitReveal {
-  to { opacity: 1; transform: translateY(0) translateZ(36px) scale(1); }
-}
-
-.hero-portrait-frame::before {
-  content: '';
-  position: absolute;
-  inset: 18px;
-  border-radius: 20px;
-  background: radial-gradient(circle at var(--gloss-x) var(--gloss-y), rgba(255,255,255,0.42), transparent 32%);
-  mix-blend-mode: screen;
-  pointer-events: none;
-  transform: translateZ(26px);
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* shimmer sweep */
 .hero-portrait-frame::after {
   content: '';
-  position: absolute;
-  inset: 18px;
-  border-radius: 20px;
+  position: absolute; inset: 0;
   background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
-  transform: translateZ(28px) translateX(-120%);
+  transform: translateX(-100%);
   animation: shimmerSweep 4s 2s ease-in-out infinite;
   pointer-events: none;
 }
 @keyframes shimmerSweep {
-  0%   { transform: translateZ(28px) translateX(-120%); opacity: 1; }
-  50%  { transform: translateZ(28px) translateX(120%);  opacity: 1; }
-  100% { transform: translateZ(28px) translateX(120%);  opacity: 0; }
-}
-
-.hero-portrait-photo {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #fff7f5;
-  transform: translateZ(22px);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
-}
-
-.hero-portrait-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(58,42,46,0.1), transparent 26%, transparent 72%, rgba(255,255,255,0.14));
-  pointer-events: none;
-}
-
-.hero-frame-side,
-.hero-frame-bottom {
-  position: absolute;
-  pointer-events: none;
-}
-
-.hero-frame-side {
-  top: 18px;
-  right: -28px;
-  width: 28px;
-  height: calc(100% - 36px);
-  border-radius: 0 18px 18px 0;
-  background: linear-gradient(180deg, rgba(128,92,101,0.84), rgba(77,54,61,0.96));
-  transform-origin: left center;
-  transform: rotateY(90deg);
-}
-
-.hero-frame-bottom {
-  left: 18px;
-  bottom: -28px;
-  width: calc(100% - 36px);
-  height: 28px;
-  border-radius: 0 0 18px 18px;
-  background: linear-gradient(180deg, rgba(148,108,118,0.9), rgba(77,54,61,0.96));
-  transform-origin: center top;
-  transform: rotateX(-90deg);
+  0%   { transform: translateX(-100%); opacity: 1; }
+  50%  { transform: translateX(100%);  opacity: 1; }
+  100% { transform: translateX(100%);  opacity: 0; }
 }
 
 .hero-img {
@@ -460,9 +364,11 @@ body {
   width: 100%;
   height: auto;
   max-height: 85vh;
-  object-fit: contain;
-  object-position: center center;
-  filter: none;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: brightness(1.04) saturate(1.08);
+  transition: transform 8s ease-out;
+  animation: slowZoom 12s ease-out forwards;
 }
 
 /* rose tag below portrait */
@@ -1038,11 +944,8 @@ footer {
 }
 
 @media (max-width: 700px) {
-  .hero { flex-direction: column; justify-content: center; padding: 2rem 1rem 4rem; }
   .hero-content { padding: 2rem 1.5rem 3rem; }
   .hero-line { left: 1.5rem; }
-  .hero-portrait-wrap { width: min(82vw, 420px); padding: 1rem 0 3rem; }
-  .hero-frame-side, .hero-frame-bottom { display: none; }
   .gallery-grid { grid-template-columns: 1fr 1fr; }
   .g-item:nth-child(1) { grid-column: 1 / 3; }
   .g-item:nth-child(2) { grid-column: 1 / 2; }
@@ -1526,7 +1429,7 @@ footer {
   </div>
 
   <!-- RIGHT: portrait -->
-  <div class="hero-portrait-wrap" id="hero3dWrap">
+  <div class="hero-portrait-wrap">
     <div class="hero-portrait-glow"></div>
     <div class="hero-portrait-ring"></div>
     <div class="hero-portrait-ring-2"></div>
@@ -1537,22 +1440,13 @@ footer {
     <span class="hero-petal">✦</span>
     <span class="hero-petal">🌸</span>
 
-    <div class="hero-portrait-stage">
-      <div class="hero-portrait-scene" id="hero3dScene">
-        <div class="hero-portrait-shadow"></div>
-        <div class="hero-portrait-frame">
-          <div class="hero-frame-side"></div>
-          <div class="hero-frame-bottom"></div>
-          <span class="hero-corner tl">🌸</span>
-          <span class="hero-corner tr">🌸</span>
-          <span class="hero-corner bl">🌸</span>
-          <span class="hero-corner br">🌸</span>
-          <div class="hero-portrait-photo">
-            <img class="hero-img" src="face.jpg.png" alt="Riona portrait" />
-          </div>
-          <div class="hero-portrait-tag">✦ Happy Birthday Quark ✦</div>
-        </div>
-      </div>
+    <div class="hero-portrait-frame">
+      <span class="hero-corner tl">🌸</span>
+      <span class="hero-corner tr">🌸</span>
+      <span class="hero-corner bl">🌸</span>
+      <span class="hero-corner br">🌸</span>
+      <img class="hero-img" src="riona_3d.png" alt="Riona 3D portrait" />
+      <div class="hero-portrait-tag">✦ Happy Birthday Quark ✦</div>
     </div>
   </div>
 
@@ -1860,44 +1754,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 galleryItems.forEach(item => observer.observe(item));
-
-/* ══ HERO 3D PORTRAIT ══ */
-(function() {
-  const wrap = document.getElementById('hero3dWrap');
-  const scene = document.getElementById('hero3dScene');
-  if (!wrap || !scene) return;
-
-  const resetTilt = () => {
-    scene.style.setProperty('--hero-rx', '-8deg');
-    scene.style.setProperty('--hero-ry', '12deg');
-    scene.style.setProperty('--gloss-x', '50%');
-    scene.style.setProperty('--gloss-y', '28%');
-  };
-
-  const updateTilt = (clientX, clientY) => {
-    const rect = wrap.getBoundingClientRect();
-    const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
-
-    scene.style.setProperty('--hero-ry', `${(x * 18).toFixed(2)}deg`);
-    scene.style.setProperty('--hero-rx', `${(-y * 14).toFixed(2)}deg`);
-    scene.style.setProperty('--gloss-x', `${(50 + x * 18).toFixed(2)}%`);
-    scene.style.setProperty('--gloss-y', `${(28 + y * 14).toFixed(2)}%`);
-  };
-
-  resetTilt();
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  wrap.addEventListener('pointermove', (event) => {
-    if (event.pointerType === 'touch') return;
-    updateTilt(event.clientX, event.clientY);
-  });
-
-  wrap.addEventListener('pointerleave', resetTilt);
-  wrap.addEventListener('pointerup', resetTilt);
-})();
-
 function openEnvelope() {
   const flap = document.getElementById('envFlap');
   const letter = document.getElementById('envLetter');
