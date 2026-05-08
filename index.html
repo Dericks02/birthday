@@ -78,61 +78,193 @@ body.night-mode .toggle-knob { transform: translateX(24px); }
 /* ══ ENVELOPE INTRO ══ */
 #envelope-intro {
   position: fixed; inset: 0; z-index: 9999;
-  background: linear-gradient(160deg, #f5d6de 0%, #fce8e0 50%, #fdf6f0 100%);
+  background: radial-gradient(ellipse at 50% 60%, #fce8ef 0%, #f5d6de 40%, #fdf0f5 100%);
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 1.5rem;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  flex-direction: column; gap: 2rem;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 #envelope-intro.done { opacity: 0; visibility: hidden; pointer-events: none; }
-.env-wrapper {
-  position: relative; width: 240px; height: 160px; cursor: pointer;
-  filter: drop-shadow(0 12px 40px rgba(194,99,122,0.25));
+
+/* floating petals behind envelope */
+.env-bg-petal {
+  position: absolute; pointer-events: none; font-size: 1.2rem; opacity: 0;
+  animation: envPetalFloat ease-in-out infinite;
 }
+@keyframes envPetalFloat {
+  0%   { opacity:0; transform: translateY(0) rotate(0deg) scale(0.8); }
+  15%  { opacity: 0.7; }
+  85%  { opacity: 0.5; }
+  100% { opacity:0; transform: translateY(-60px) rotate(25deg) scale(1.1); }
+}
+
+.env-wrapper {
+  position: relative; width: 340px; height: 230px; cursor: pointer;
+  filter: drop-shadow(0 20px 60px rgba(194,99,122,0.35));
+  perspective: 1400px;
+  animation: envBreathe 3s ease-in-out infinite;
+}
+@keyframes envBreathe {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%     { transform: translateY(-6px) scale(1.012); }
+}
+.env-wrapper.opening { animation: none; }
+
 .env-body {
-  position: absolute; bottom: 0; width: 240px; height: 130px;
-  background: linear-gradient(180deg, #fff 0%, #fdf0f3 100%);
-  border-radius: 0 0 14px 14px;
-  border: 1.5px solid rgba(194,99,122,0.25); border-top: none; overflow: hidden;
+  position: absolute; bottom: 0; width: 340px; height: 185px;
+  background: linear-gradient(170deg, #fffaf8 0%, #fdeef3 60%, #fce8ef 100%);
+  border-radius: 0 0 20px 20px;
+  border: 1.5px solid rgba(194,99,122,0.3); border-top: none; overflow: hidden;
+  box-shadow: inset 0 -4px 20px rgba(194,99,122,0.06);
 }
 .env-body::before, .env-body::after {
   content: ''; position: absolute; bottom: 0; width: 0; height: 0;
-  border-bottom: 130px solid transparent;
+  border-bottom: 185px solid transparent;
 }
-.env-body::before { left: 0; border-left: 120px solid rgba(234,175,190,0.18); }
-.env-body::after { right: 0; border-right: 120px solid rgba(234,175,190,0.18); }
+.env-body::before { left: 0; border-left: 170px solid rgba(234,175,190,0.15); }
+.env-body::after  { right:0; border-right:170px solid rgba(234,175,190,0.15); }
+
 .env-bottom {
-  position: absolute; bottom: 0; width: 240px; height: 0;
-  border-left: 120px solid transparent; border-right: 120px solid transparent;
-  border-bottom: 90px solid rgba(228,160,178,0.22); pointer-events: none;
+  position: absolute; bottom: 0; width: 340px; height: 0;
+  border-left: 170px solid transparent; border-right: 170px solid transparent;
+  border-bottom: 118px solid rgba(228,160,178,0.2); pointer-events: none;
 }
+.env-seal {
+  position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+  width: 38px; height: 38px; border-radius: 50%;
+  background: radial-gradient(circle, #f9dde5, #e8a0b0);
+  border: 1.5px solid rgba(194,99,122,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; z-index: 3; pointer-events: none;
+  box-shadow: 0 2px 10px rgba(194,99,122,0.3);
+  transition: opacity 0.4s ease;
+}
+
 .env-flap {
-  position: absolute; top: 0; left: 0; width: 240px; height: 0;
-  border-left: 120px solid transparent; border-right: 120px solid transparent;
-  border-top: 100px solid #f9dde5;
+  position: absolute; top: 0; left: 0; width: 340px; height: 0;
+  border-left: 170px solid transparent; border-right: 170px solid transparent;
+  border-top: 135px solid #f5c8d5;
   transform-origin: top center;
-  transition: transform 0.9s cubic-bezier(0.4,0,0.2,1);
-  filter: drop-shadow(0 4px 8px rgba(194,99,122,0.12)); z-index: 2;
+  transition: transform 1s cubic-bezier(0.4,0,0.2,1);
+  filter: drop-shadow(0 6px 12px rgba(194,99,122,0.18)); z-index: 4;
 }
-.env-flap.open { transform: rotateX(180deg); }
+.env-flap::after {
+  content: ''; position: absolute; top: -135px; left: -170px;
+  width: 340px; height: 135px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+  pointer-events: none;
+}
+.env-flap.open { transform: rotateX(185deg); }
+
 .env-flap-heart {
-  position: absolute; top: -75px; left: 50%; transform: translateX(-50%);
-  font-size: 1.4rem; z-index: 3; pointer-events: none; transition: opacity 0.3s;
+  position: absolute; top: -105px; left: 50%; transform: translateX(-50%);
+  font-size: 1.6rem; z-index: 5; pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
-.env-flap.open ~ .env-flap-heart { opacity: 0; }
+.env-flap.open ~ .env-flap-heart { opacity: 0; transform: translateX(-50%) scale(0.5); }
+
+/* ── MINI LETTER (inside envelope) ── */
 .env-letter {
-  position: absolute; bottom: 10px; left: 50%;
-  transform: translateX(-50%) translateY(0);
-  width: 190px; background: #fff; border-radius: 6px;
-  padding: 1rem 1.2rem;
-  box-shadow: 0 2px 16px rgba(194,99,122,0.15);
-  border: 1px solid rgba(194,99,122,0.12);
-  text-align: center;
-  transition: transform 0.8s 0.5s cubic-bezier(0.34,1.56,0.64,1); z-index: 1;
+  position: absolute; bottom: 12px; left: 50%;
+  transform: translateX(-50%) translateY(0) scale(1);
+  width: 270px;
+  background: linear-gradient(170deg, #fff 0%, #fffaf8 100%);
+  border-radius: 10px;
+  padding: 1.4rem 1.6rem;
+  box-shadow: 0 4px 24px rgba(194,99,122,0.18);
+  border: 1px solid rgba(194,99,122,0.18);
+  text-align: center; z-index: 1;
+  transition: transform 1s 0.45s cubic-bezier(0.34,1.56,0.64,1),
+              opacity 0.4s 1.6s ease;
 }
-.env-letter.rise { transform: translateX(-50%) translateY(-120px); }
-.env-letter-tag { font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:0.25em; color:var(--rose); text-transform:uppercase; margin-bottom:0.4rem; }
-.env-letter-text { font-size: 1.1rem; font-style: italic; font-weight: 300; color: var(--text); line-height: 1.4; }
-.env-hint { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; color:var(--rose); text-transform:uppercase; animation: hintPulse 2s ease-in-out infinite; }
+.env-letter.rise {
+  transform: translateX(-50%) translateY(-230px) scale(1.06);
+}
+.env-letter.fade-mini { opacity: 0; }
+
+.env-letter-tag {
+  font-family:'DM Mono',monospace; font-size:0.52rem; letter-spacing:0.3em;
+  color:var(--rose); text-transform:uppercase; margin-bottom:0.6rem;
+}
+.env-letter-text {
+  font-size: 1.35rem; font-style: italic; font-weight: 300;
+  color: var(--text); line-height: 1.5;
+}
+
+/* ── FULL LETTER CARD ── */
+#envLetterFull {
+  position: fixed; inset: 0; z-index: 99998;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+#envLetterFull.show { opacity: 1; pointer-events: all; cursor: pointer; }
+
+.env-full-card {
+  background: linear-gradient(170deg, #fff 0%, #fffaf8 100%);
+  border-radius: 24px; padding: 3rem 3.5rem;
+  max-width: 500px; width: 100%;
+  box-shadow: 0 30px 100px rgba(194,99,122,0.28), 0 0 0 1.5px rgba(194,99,122,0.2);
+  text-align: center; position: relative; overflow: hidden;
+  transform: scale(0.6) translateY(40px); opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1), opacity 0.5s ease;
+}
+#envLetterFull.show .env-full-card { transform: scale(1) translateY(0); opacity: 1; }
+
+.env-full-corner {
+  position: absolute; font-size: 1.6rem; pointer-events: none;
+  animation: cornerFloat 3s ease-in-out infinite;
+}
+.env-full-corner:nth-child(1) { top: 1rem; left: 1.2rem; animation-delay:0s; }
+.env-full-corner:nth-child(2) { top: 1rem; right: 1.2rem; animation-delay:0.5s; }
+.env-full-corner:nth-child(3) { bottom:1rem; left:1.2rem; animation-delay:1s; }
+.env-full-corner:nth-child(4) { bottom:1rem; right:1.2rem; animation-delay:1.5s; }
+@keyframes cornerFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-4px) rotate(8deg)} }
+
+.env-full-divider {
+  display: flex; align-items: center; gap: 0.8rem; margin: 1.2rem 0;
+}
+.env-full-divider::before, .env-full-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(194,99,122,0.35), transparent);
+}
+.env-full-divider span { font-size: 1rem; }
+.env-full-tag {
+  font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:0.35em;
+  color: var(--rose); text-transform: uppercase; margin-bottom: 1rem;
+}
+.env-full-title {
+  font-family:'Cormorant Garamond',serif; font-size: clamp(2.2rem,6vw,3.4rem);
+  font-weight: 300; font-style: italic; color: var(--text); line-height: 1.2;
+  margin-bottom: 1.2rem;
+}
+.env-full-title strong { color: var(--rose); font-weight: 600; }
+.env-full-body {
+  font-family:'Cormorant Garamond',serif; font-size: 1.1rem; font-weight:300;
+  color: var(--dim); line-height: 1.8; margin-bottom: 1.6rem;
+}
+.env-full-hint {
+  font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:0.3em;
+  color: rgba(194,99,122,0.6); text-transform: uppercase;
+  animation: hintPulse 2s ease-in-out infinite;
+}
+
+/* ── SPARKLES ── */
+#envSparkles { position: fixed; inset:0; pointer-events:none; z-index:99997; }
+.env-spark {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  animation: sparkFly ease-out forwards;
+}
+@keyframes sparkFly {
+  0%   { opacity:1; transform: translate(0,0) scale(1) rotate(0deg); }
+  100% { opacity:0; transform: translate(var(--sx),var(--sy)) scale(0) rotate(var(--sr)); }
+}
+
+.env-hint {
+  font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.3em;
+  color:var(--rose); text-transform:uppercase; animation: hintPulse 2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
 @keyframes hintPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
 /* ══ STARS & PETALS ══ */
@@ -1786,19 +1918,43 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(194,99,122,0.12);pa
 
 
 <!-- ENVELOPE INTRO -->
-<div id="envelope-intro" onclick="openEnvelope()">
-  <div class="env-wrapper">
+<div id="envelope-intro">
+  <div class="env-wrapper" id="envWrapper" onclick="openEnvelope()">
     <div class="env-flap" id="envFlap"></div>
     <span class="env-flap-heart">💌</span>
     <div class="env-body"></div>
+    <div class="env-seal" id="envSeal">🌸</div>
     <div class="env-bottom"></div>
     <div class="env-letter" id="envLetter">
-      <div class="env-letter-tag">For Riona 🌸</div>
+      <div class="env-letter-tag">For Riona Quark 🌸</div>
       <div class="env-letter-text">A birthday surprise<br>just for you…</div>
     </div>
   </div>
   <div class="env-hint" id="envHint">✦ tap to open ✦</div>
 </div>
+
+<!-- Full-screen letter card -->
+<div id="envLetterFull" onclick="proceedFromLetter()">
+  <div class="env-full-card">
+    <span class="env-full-corner">🌸</span>
+    <span class="env-full-corner">⚛️</span>
+    <span class="env-full-corner">✨</span>
+    <span class="env-full-corner">🌸</span>
+    <div class="env-full-tag">✦ A letter for you ✦</div>
+    <div class="env-full-divider"><span>💌</span></div>
+    <div class="env-full-title">Happy Birthday,<br><strong>Riona Quark!</strong></div>
+    <div class="env-full-divider"><span>⚛️</span></div>
+    <div class="env-full-body">
+      Something very special has been prepared<br>
+      just for you — a little world made<br>
+      entirely with love. 🌸
+    </div>
+    <div class="env-full-hint">✦ tap anywhere to step inside ✦</div>
+  </div>
+</div>
+
+<!-- Sparkles container -->
+<div id="envSparkles"></div>
 
 <div class="stars-canvas" id="stars"></div>
 <div class="petals-canvas" id="petals"></div>
@@ -2453,6 +2609,26 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
 }
 
 /* ══════════════════════════════════════════
+   ENVELOPE BACKGROUND PETALS
+══════════════════════════════════════════ */
+(function buildEnvBg(){
+  const intro = document.getElementById('envelope-intro');
+  if (!intro) return;
+  const emojis = ['🌸','🌷','✨','🌺','💮'];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'env-bg-petal';
+    p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left = (5 + Math.random()*90) + '%';
+    p.style.top  = (10 + Math.random()*80) + '%';
+    p.style.animationDuration  = (3 + Math.random()*4) + 's';
+    p.style.animationDelay     = (Math.random()*4) + 's';
+    p.style.fontSize = (0.9 + Math.random()*0.7) + 'rem';
+    intro.appendChild(p);
+  }
+})();
+
+/* ══════════════════════════════════════════
    LOCK SCREEN DECORATIONS
 ══════════════════════════════════════════ */
 (function buildLockBg(){
@@ -2724,16 +2900,93 @@ function initTimelineObserver() {
 /* ══════════════════════════════════════════
    ENVELOPE OPEN
 ══════════════════════════════════════════ */
+function spawnEnvSparkles() {
+  const container = document.getElementById('envSparkles');
+  const wrapper   = document.getElementById('envWrapper');
+  if (!container || !wrapper) return;
+  const rect = wrapper.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top  + rect.height / 2;
+  const colors = ['#c2637a','#e8a0b0','#f5d6de','#c9943a','#f5d470','#fff'];
+  const emojis = ['🌸','✨','⭐','💫','🌷','✦'];
+  for (let i = 0; i < 36; i++) {
+    const s = document.createElement('div');
+    s.className = 'env-spark';
+    const angle = (i / 36) * 360 + (Math.random() - 0.5) * 20;
+    const dist  = 80 + Math.random() * 160;
+    const sx    = Math.cos(angle * Math.PI / 180) * dist + 'px';
+    const sy    = Math.sin(angle * Math.PI / 180) * dist + 'px';
+    const sz    = (4 + Math.random() * 8) + 'px';
+    s.style.cssText = `
+      left:${cx}px; top:${cy}px; width:${sz}; height:${sz};
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+      --sx:${sx}; --sy:${sy}; --sr:${Math.random()*720-360}deg;
+      animation-duration:${0.7+Math.random()*0.7}s;
+      animation-delay:${Math.random()*0.2}s;
+    `;
+    container.appendChild(s);
+    setTimeout(() => s.remove(), 1800);
+  }
+  // emoji bursts
+  for (let i = 0; i < 10; i++) {
+    const e = document.createElement('div');
+    e.className = 'env-spark';
+    e.style.fontSize = (1 + Math.random() * 0.8) + 'rem';
+    e.style.background = 'none';
+    e.style.borderRadius = '0';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    const angle = Math.random() * 360;
+    const dist  = 60 + Math.random() * 130;
+    const sx    = Math.cos(angle * Math.PI / 180) * dist + 'px';
+    const sy    = Math.sin(angle * Math.PI / 180) * dist + 'px';
+    e.style.cssText += `
+      left:${cx}px; top:${cy}px;
+      --sx:${sx}; --sy:${sy}; --sr:${Math.random()*360}deg;
+      animation-duration:${1+Math.random()*0.6}s;
+      animation-delay:${0.1+Math.random()*0.3}s;
+    `;
+    container.appendChild(e);
+    setTimeout(() => e.remove(), 2000);
+  }
+}
+
 function openEnvelope() {
-  const flap   = document.getElementById('envFlap');
-  const letter = document.getElementById('envLetter');
-  const hint   = document.getElementById('envHint');
-  const intro  = document.getElementById('envelope-intro');
+  const flap    = document.getElementById('envFlap');
+  const letter  = document.getElementById('envLetter');
+  const hint    = document.getElementById('envHint');
+  const seal    = document.getElementById('envSeal');
+  const wrapper = document.getElementById('envWrapper');
   if (!flap || flap.classList.contains('open')) return;
-  flap.classList.add('open');
+
+  // stop breathing animation
+  if (wrapper) wrapper.classList.add('opening');
+  // hide hint
   if (hint) hint.style.opacity = '0';
-  setTimeout(() => { if (letter) letter.classList.add('rise'); }, 500);
-  setTimeout(() => { if (intro) intro.classList.add('done'); }, 1900);
+  // fade seal
+  if (seal) seal.style.opacity = '0';
+  // open flap
+  flap.classList.add('open');
+
+  // sparkle burst
+  setTimeout(spawnEnvSparkles, 350);
+
+  // letter rises
+  setTimeout(() => { if (letter) letter.classList.add('rise'); }, 480);
+
+  // fade mini-letter, show full-screen card
+  setTimeout(() => {
+    if (letter) letter.classList.add('fade-mini');
+    const full = document.getElementById('envLetterFull');
+    if (full) full.classList.add('show');
+  }, 1550);
+}
+
+function proceedFromLetter() {
+  const full  = document.getElementById('envLetterFull');
+  const intro = document.getElementById('envelope-intro');
+  if (full)  { full.style.opacity = '0'; full.style.pointerEvents = 'none'; }
+  setTimeout(() => { if (intro) intro.classList.add('done'); }, 500);
 }
 
 /* ══════════════════════════════════════════
