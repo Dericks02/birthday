@@ -2507,6 +2507,7 @@ const HINTS = [
 /* ══════════════════════════════════════════
    COUNTDOWN
 ══════════════════════════════════════════ */
+let unlockFired = false;
 function pad(n) { return String(n).padStart(2, '0'); }
 function setNum(id, val) {
   const el = document.getElementById(id);
@@ -2630,7 +2631,6 @@ function launchConfetti() {
 /* ══════════════════════════════════════════
    UNLOCK SEQUENCE
 ══════════════════════════════════════════ */
-let unlockFired = false;
 function doUnlock() {
   if (unlockFired) return;
   unlockFired = true;
